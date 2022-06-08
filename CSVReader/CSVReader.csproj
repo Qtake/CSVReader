@@ -17,8 +17,11 @@
 
   <ItemGroup>
     <EmbeddedResource Update="Language\InterfaceLanguage.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterfaceLanguage.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Language\InterfaceLanguage.ru.resx">
+      <Generator></Generator>
     </EmbeddedResource>
   </ItemGroup>
 

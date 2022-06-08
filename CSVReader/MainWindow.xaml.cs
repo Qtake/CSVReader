@@ -1,8 +1,12 @@
 ﻿using CSVReader.Language;
+using CSVReader.MainMenuElements.Settings;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,26 +25,25 @@ namespace CSVReader
     /// </summary>
     public partial class MainWindow : Window
     {
-        private LanguageSelector _languageSelector;
-        private string[] _languages;
+        //private LanguageSelector _languageSelector;
+        //private string[] _languages;
 
-        private const int DefaultLangeageIndex = 0;
+        //private const int DefaultLangeageIndex = 0;
 
         public MainWindow()
         {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+
             InitializeComponent();
 
-            _languageSelector = new LanguageSelector();
-            _languages = _languageSelector.Languages.Keys.ToArray();
-            _languageSelector.Select(_languages[DefaultLangeageIndex]);
 
-            Settings.Header = InterfaceLanguage.Settings;
-            Language1.Header = InterfaceLanguage.Language;
+
+            //SettingsItem.Header = InterfaceLanguage.Settings;
         }
 
-        private void Language_Click(object sender, RoutedEventArgs e)
+        private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            MainMenuElements.Settings.Settings settingsWindow = new MainMenuElements.Settings.Settings(_languages, DefaultLangeageIndex);
+            SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.ShowDialog();
         }
     }
