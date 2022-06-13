@@ -2,6 +2,7 @@
 using CSVReader.MainMenuElements.Settings;
 using Microsoft.Win32;
 using System.Globalization;
+using System.IO;
 using System.Threading;
 using System.Windows;
 
@@ -34,39 +35,32 @@ namespace CSVReader
                 Filter = "CSV files (*.csv)|*.csv"
             };
 
-            bool? isOpen = openFileDialog.ShowDialog();
+            bool? dialogResult = openFileDialog.ShowDialog();
 
-            if (isOpen == true)
+            if (dialogResult == true)
             {
                 string filename = openFileDialog.FileName;
-                MessageBox.Show(filename);
+                MessageBox.Show(Path.GetExtension(filename));
             }
-            else
-            {
-                MessageBox.Show(InterfaceLanguage.OpenFileError, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
+            //MessageBox.Show(InterfaceLanguage.OpenFileError, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new SaveFileDialog()
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
                 FileName = "Document",
                 Filter = "Excel Files | *.xls; *.xlsx; *.xlsm; | XML Files | *.xml"
             };
 
-            bool? result = dialog.ShowDialog();
+            bool? dialogResult = saveFileDialog.ShowDialog();
 
-            if (result == true)
+            if (dialogResult == null)
             {
-                string filename = dialog.FileName;
-                MessageBox.Show(filename);
-                //Path.GetExtension(filename)
+                string filename = saveFileDialog.FileName;
             }
-            else
-            {
-                MessageBox.Show(InterfaceLanguage.SaveFileError, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
