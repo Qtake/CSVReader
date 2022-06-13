@@ -1,4 +1,5 @@
 ﻿using CSVReader.Language;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,32 +11,42 @@ namespace CSVReader.MainMenuElements.Settings
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        public Dictionary<string, Page> SettingsItems { get; private set; }
-        public string[] Strings { get; set; }
-
-        private string _selectedSettingsItem;
+        private readonly Dictionary<string, Page> _settingsItems;
+        private string _selectedKey;
 
         public SettingsWindow()
-        {
-            SettingsItems = new Dictionary<string, Page>()
+        { 
+            InitializeComponent();
+
+            _settingsItems = new Dictionary<string, Page>()
             {
                 { InterfaceLanguage.Language, new LanguagePage() }
             };
-
-            Strings = new string[] { "hehe", "haha" };
-
-            InitializeComponent();
-
-
-
-            //_selectedSettingsItem = string.Empty;
-            //test.ItemsSource = SettingsItems.Keys;
+            SettingsMenu.ItemsSource = _settingsItems.Keys;
+            _selectedKey = string.Empty;
         }
 
-        private void test_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void SettingsMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //_selectedSettingsItem = test.SelectedItem.ToString() ?? "None";
-            //SelectedPage.Content = SettingsItems[_selectedSettingsItem];
+            _selectedKey = SettingsMenu.SelectedValue.ToString() ?? "None";
+            SelectedPage.Content = _settingsItems[_selectedKey];
+        }
+
+        private void OK_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ((ISaveChanges)_settingsItems[_selectedKey]).SaveChanges();
+            }
+            catch(InvalidCastException)
+            {
+                throw new InvalidCastException();
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

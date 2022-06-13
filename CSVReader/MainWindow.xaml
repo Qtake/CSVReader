@@ -8,9 +8,24 @@
         mc:Ignorable="d"
         Title="CSVReader" Height="450" Width="800">
     <Grid>
-        <Menu>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <Menu Grid.Row="0">
+            <MenuItem Header="{x:Static lang:InterfaceLanguage.File}">
+                <MenuItem Header="{x:Static lang:InterfaceLanguage.Open}"
+                          Click="Open_Click"/>
+                <MenuItem Header="{x:Static lang:InterfaceLanguage.SaveAs}"
+                          Click="SaveAs_Click"/>
+                <MenuItem Header="{x:Static lang:InterfaceLanguage.Exit}"
+                          Click="Exit_Click"/>
+            </MenuItem>
             <MenuItem Header="{x:Static lang:InterfaceLanguage.Settings}"
                       Click="Settings_Click"/>
         </Menu>
+        <DataGrid Grid.Row="1"
+                  Margin="5"/>
     </Grid>
 </Window>

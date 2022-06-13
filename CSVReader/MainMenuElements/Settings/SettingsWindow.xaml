@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CSVReader.MainMenuElements.Settings"
+        xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
         mc:Ignorable="d"
         Title="Settings" Height="450" Width="800">
     <Grid Background="LightGray">
@@ -17,32 +18,31 @@
             <ColumnDefinition Width="0.75*"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Row="0" 
+        <ListBox x:Name="SettingsMenu"
+                 Grid.Row="0" 
                  Grid.Column="0"
                  Margin="5"
-                 ItemsSource="{Binding Settings}"
-                 DisplayMemberPath="Keys"
-                 SelectionChanged="test_SelectionChanged"/>
-
+                 SelectionChanged="SettingsMenu_SelectionChanged"/>
         <Frame x:Name="SelectedPage"
                Grid.Row="0" 
                Grid.Column="1"
                Margin="5"
                NavigationUIVisibility="Hidden"/>
-
         <StackPanel Grid.Row="1" 
                     Grid.Column="1" 
                     HorizontalAlignment="Right" 
                     VerticalAlignment="Center" 
                     Orientation="Horizontal">
-            <Button Content="Ok" 
+            <Button Content="{x:Static lang:InterfaceLanguage.OK}" 
                     Width="100" 
                     Height="25" 
-                    Margin="5"/>
-            <Button Content="Cancel" 
+                    Margin="5"
+                    Click="OK_Click"/>
+            <Button Content="{x:Static lang:InterfaceLanguage.Cancel}"
                     Width="100" 
                     Height="25" 
-                    Margin="5"/>
+                    Margin="5"
+                    Click="Cancel_Click"/>
         </StackPanel>
 
     </Grid>

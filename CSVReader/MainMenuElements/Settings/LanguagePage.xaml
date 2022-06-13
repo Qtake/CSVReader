@@ -4,17 +4,19 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:CSVReader.MainMenuElements.Settings"
+      xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="LanguagePage">
 
     <Grid>
-        <StackPanel Orientation="Vertical" 
-                    HorizontalAlignment="Left" 
+        <StackPanel Orientation="Vertical"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Top">
-            <Label Content="Test"/>
-            <ComboBox Width="160" 
-                      Height="25" 
+            <TextBlock Text="{x:Static lang:InterfaceLanguage.Language}"/>
+            <ComboBox x:Name="LanguageBox"
+                      Width="160"
+                      Height="25"
                       IsReadOnly="True"
                       IsTextSearchEnabled="True"/>
         </StackPanel>
