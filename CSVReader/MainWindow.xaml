@@ -25,7 +25,8 @@
             <MenuItem Header="{x:Static lang:InterfaceLanguage.Settings}"
                       Click="Settings_Click"/>
         </Menu>
-        <DataGrid Grid.Row="1"
+        <DataGrid x:Name="DataBaseRecords"
+                  Grid.Row="1"
                   Margin="5"/>
     </Grid>
 </Window>

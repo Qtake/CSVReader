@@ -1,8 +1,10 @@
-﻿using CSVReader.Language;
+﻿using CSVReader.DataBase;
 using CSVReader.MainMenuElements.Settings;
 using Microsoft.Win32;
+using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 
@@ -19,6 +21,14 @@ namespace CSVReader
 
             InitializeComponent();
 
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                Record record = new Record(DateTime.Now, "lexa", "Jevnyak", "Genadevich", "Gomel", "Belarus");
+                db.Records.Add(record);
+                db.SaveChanges();
+                DataBaseRecords.ItemsSource = db.Records.ToList();
+            }
+
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -32,7 +42,7 @@ namespace CSVReader
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
                 FileName = "Document",
-                Filter = "CSV files (*.csv)|*.csv"
+                Filter = "CSV Files (*.csv)|*.csv"
             };
 
             bool? dialogResult = openFileDialog.ShowDialog();
@@ -56,7 +66,7 @@ namespace CSVReader
 
             bool? dialogResult = saveFileDialog.ShowDialog();
 
-            if (dialogResult == null)
+            if (dialogResult == true)
             {
                 string filename = saveFileDialog.FileName;
             }
