@@ -1,5 +1,6 @@
 ﻿using CSVReader.DataBase;
 using CSVReader.MainMenuElements.Settings;
+using CSVReader.MainWindowPages;
 using Microsoft.Win32;
 using System;
 using System.Globalization;
@@ -21,14 +22,7 @@ namespace CSVReader
 
             InitializeComponent();
 
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                Record record = new Record(DateTime.Now, "lexa", "Jevnyak", "Genadevich", "Gomel", "Belarus");
-                db.Records.Add(record);
-                db.SaveChanges();
-                DataBaseRecords.ItemsSource = db.Records.ToList();
-            }
-
+            MainFrame.Content = new OutputDataPage();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -49,11 +43,27 @@ namespace CSVReader
 
             if (dialogResult == true)
             {
-                string filename = openFileDialog.FileName;
-                MessageBox.Show(Path.GetExtension(filename));
-            }
+                Record record = new Record();
 
-            //MessageBox.Show(InterfaceLanguage.OpenFileError, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                using (StreamReader reader = new StreamReader(openFileDialog.FileName))
+                {
+                    while (reader.Peek() > -1)
+                    {
+                        string? line = reader.ReadLine();
+
+                        if (line != null)
+                        {
+                            record.ParseRecord(line);
+
+                            using (ApplicationContext db = new ApplicationContext())
+                            {
+                                db.Records.Add(record);
+                                db.SaveChanges();
+                            }
+                        }
+                    }
+                };
+            }
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
@@ -69,8 +79,9 @@ namespace CSVReader
             if (dialogResult == true)
             {
                 string filename = saveFileDialog.FileName;
-            }
 
+                //MessageBox.Show(Path.GetExtension(filename));
+            }
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
