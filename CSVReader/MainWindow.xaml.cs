@@ -1,12 +1,14 @@
 ﻿using CSVReader.DataBase;
+using CSVReader.DataManagers;
 using CSVReader.MainMenuElements.Settings;
 using CSVReader.MainWindowPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace CSVReader
@@ -16,13 +18,22 @@ namespace CSVReader
     /// </summary>
     public partial class MainWindow : Window
     {
+        public bool IsDataLoaded { get; set; }
+        private IDataManager _dataManager;
+
         public MainWindow()
         {
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
-
             InitializeComponent();
 
-            MainFrame.Content = new OutputDataPage();
+            IsDataLoaded = false;
+            _dataManager = new FileManager();
+
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                db.Database.ExecuteSqlRaw("DROP TABLE [Records]");
+                db.SaveChanges();
+            }
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)
@@ -31,7 +42,7 @@ namespace CSVReader
             settingsWindow.ShowDialog();
         }
 
-        private void Open_Click(object sender, RoutedEventArgs e)
+        private async void Open_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
@@ -43,31 +54,21 @@ namespace CSVReader
 
             if (dialogResult == true)
             {
-                Record record = new Record();
-
-                using (StreamReader reader = new StreamReader(openFileDialog.FileName))
-                {
-                    while (reader.Peek() > -1)
-                    {
-                        string? line = reader.ReadLine();
-
-                        if (line != null)
-                        {
-                            record.ParseRecord(line);
-
-                            using (ApplicationContext db = new ApplicationContext())
-                            {
-                                db.Records.Add(record);
-                                db.SaveChanges();
-                            }
-                        }
-                    }
-                };
+                MainFrame.Content = new LoadingPage();
+                await Task.Run(() => _dataManager.Read(openFileDialog.FileName));
+                MainFrame.Content = new OutputDataPage();
+                IsDataLoaded = true;
             }
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
+            if (!IsDataLoaded)
+            {
+                MessageBox.Show("Нет данных для сохранения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
                 FileName = "Document",
@@ -78,9 +79,7 @@ namespace CSVReader
 
             if (dialogResult == true)
             {
-                string filename = saveFileDialog.FileName;
-
-                //MessageBox.Show(Path.GetExtension(filename));
+               // _dataManager.Write(saveFileDialog.FileName);
             }
         }
 

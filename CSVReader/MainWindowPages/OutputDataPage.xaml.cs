@@ -15,11 +15,13 @@ namespace CSVReader.MainWindowPages
         {
             InitializeComponent();
 
+            FillDataGrid();
+        }
+
+        private void FillDataGrid()
+        {
             using (ApplicationContext db = new ApplicationContext())
             {
-                Record record = new Record(DateTime.Now, "Kolya", "debik", "Debik", "Gomel", "Belarus");
-                db.Records.Add(record);
-                db.SaveChanges();
                 DataGrid.ItemsSource = db.Records.ToList();
             }
         }

@@ -2,7 +2,7 @@
 
 namespace CSVReader.DataBase
 {
-    internal class Record
+    public class Record
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
@@ -36,15 +36,14 @@ namespace CSVReader.DataBase
         {
             try
             {
-                Id = 0;
                 string[] splitedData = fileLine.Split(';');
+                Id = 0;
                 Date = Convert.ToDateTime(splitedData[0]);
                 Name = splitedData[1];
                 Surname = splitedData[2];
                 Patronymic = splitedData[3];
                 City = splitedData[4];
                 Country = splitedData[5];
-                
                 return true;
             }
             catch(Exception ex)
