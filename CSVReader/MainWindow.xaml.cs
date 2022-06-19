@@ -8,7 +8,6 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -31,7 +30,10 @@ namespace CSVReader
 
             IsDataLoaded = false;
             _dataManager = new FileManager();
+        }
 
+        private void DeletePreviousData()
+        {
             using (ApplicationContext db = new ApplicationContext())
             {
                 db.Database.ExecuteSqlRaw("DROP TABLE [Records]");
@@ -70,7 +72,7 @@ namespace CSVReader
         {
             if (!IsDataLoaded)
             {
-                MessageBox.Show("Нет данных для сохранения", InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(InterfaceLanguage.NoDataToSave, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -89,6 +91,7 @@ namespace CSVReader
                     new Record(DateTime.Now, "Lexa", "J", "G", "Gomel", "Belarus"),
                     new Record(DateTime.Now, "Raul", "K", "A", "Gomel", "Belarus")
                 };
+
                _dataManager.Write(saveFileDialog.FileName, records);
             }
         }

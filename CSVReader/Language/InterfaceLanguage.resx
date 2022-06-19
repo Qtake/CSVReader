@@ -156,8 +156,8 @@
   <data name="NeedRestart" xml:space="preserve">
     <value>Changes will only take effect after a restart.</value>
   </data>
-  <data name="NoData" xml:space="preserve">
-    <value>No data to save.</value>
+  <data name="NoDataToSave" xml:space="preserve">
+    <value>No data to be saved.</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>

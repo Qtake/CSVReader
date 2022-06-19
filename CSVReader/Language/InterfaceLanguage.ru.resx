@@ -156,8 +156,8 @@
   <data name="NeedRestart" xml:space="preserve">
     <value>Изменения вступят в силу только после перезапуска.</value>
   </data>
-  <data name="NoData" xml:space="preserve">
-    <value>Нет данных, которые можно сохранить.</value>
+  <data name="NoDataToSave" xml:space="preserve">
+    <value>Нет данных, которые необходимо сохранить.</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>ОК</value>

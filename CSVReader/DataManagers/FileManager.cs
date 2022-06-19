@@ -1,11 +1,11 @@
 ﻿using CSVReader.DataBase;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.MemoryMappedFiles;
-using System.Linq;
 using System.Xml.Serialization;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Data;
 
 namespace CSVReader.DataManagers
 {
@@ -42,7 +42,7 @@ namespace CSVReader.DataManagers
                     SaveAsXML(path, records);
                     break;
                 case ".xls":
-                    SaveAsXLS(path);
+                    SaveAsXLS(path, records);
                     break ;
             }
         }
@@ -63,9 +63,41 @@ namespace CSVReader.DataManagers
             }
         }
 
-        private void SaveAsXLS(string path)
+        private void SaveAsXLS(string path, List<Record> records)
         {
+            try
+            {
+                DataTable dataTable = Converter.ToDataTable(records);
 
+                if (dataTable == null || dataTable.Columns.Count == 0)
+                {
+                    throw new Exception("Null or empty input table.\n");
+                }
+
+                Excel.Application excelApplication = new Excel.Application();
+                excelApplication.Workbooks.Add();
+                Excel._Worksheet workSheet = excelApplication.ActiveSheet;
+
+                for (var i = 0; i < dataTable.Columns.Count; i++)
+                {
+                    workSheet.Cells[1, i + 1] = dataTable.Columns[i].ColumnName;
+                }
+
+                for (var i = 0; i < dataTable.Rows.Count; i++)
+                {
+                    for (var j = 0; j < dataTable.Columns.Count; j++)
+                    {
+                        workSheet.Cells[i + 2, j + 1] = dataTable.Rows[i][j];
+                    }
+                }
+
+                workSheet.SaveAs(path);
+                excelApplication.Quit();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

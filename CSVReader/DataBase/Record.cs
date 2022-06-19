@@ -37,6 +37,7 @@ namespace CSVReader.DataBase
             try
             {
                 string[] splitedData = fileLine.Split(';');
+
                 Id = 0;
                 Date = Convert.ToDateTime(splitedData[0]);
                 Name = splitedData[1];
@@ -44,11 +45,13 @@ namespace CSVReader.DataBase
                 Patronymic = splitedData[3];
                 City = splitedData[4];
                 Country = splitedData[5];
+
                 return true;
             }
             catch(Exception ex)
             {
                 Console.WriteLine(ex.Message);
+
                 return false;
             }   
         }
