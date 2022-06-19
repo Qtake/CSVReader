@@ -19,8 +19,8 @@ namespace CSVReader
     /// </summary>
     public partial class MainWindow : Window
     {
-        public bool IsDataLoaded { get; set; }
         private IDataManager _dataManager;
+        private bool _isDataLoaded;
 
         public MainWindow()
         {
@@ -28,7 +28,7 @@ namespace CSVReader
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(new LanguageSelector().GetValue(key));
             InitializeComponent();
 
-            IsDataLoaded = false;
+            _isDataLoaded = false;
             _dataManager = new FileManager();
         }
 
@@ -49,7 +49,9 @@ namespace CSVReader
 
         private async void Open_Click(object sender, RoutedEventArgs e)
         {
-            IsDataLoaded = false;
+            _isDataLoaded = false;
+            OpenItem.IsEnabled = false;
+            DeletePreviousData();
 
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
@@ -64,13 +66,14 @@ namespace CSVReader
                 MainFrame.Content = new LoadingPage();
                 await Task.Run(() => _dataManager.Read(openFileDialog.FileName));
                 MainFrame.Content = new OutputDataPage();
-                IsDataLoaded = true;
+                _isDataLoaded = true;
+                OpenItem.IsEnabled = true;
             }
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            if (!IsDataLoaded)
+            if (!_isDataLoaded)
             {
                 MessageBox.Show(InterfaceLanguage.NoDataToSave, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;

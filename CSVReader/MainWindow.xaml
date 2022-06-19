@@ -15,7 +15,8 @@
         
         <Menu Grid.Row="0">
             <MenuItem Header="{x:Static lang:InterfaceLanguage.File}">
-                <MenuItem Header="{x:Static lang:InterfaceLanguage.Open}"
+                <MenuItem x:Name="OpenItem"
+                          Header="{x:Static lang:InterfaceLanguage.Open}"
                           Click="Open_Click"/>
                 <MenuItem Header="{x:Static lang:InterfaceLanguage.SaveAs}"
                           Click="SaveAs_Click"/>
