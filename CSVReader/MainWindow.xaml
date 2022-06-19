@@ -27,6 +27,7 @@
         </Menu>
         <Frame x:Name="MainFrame"
                Grid.Row="1"
-               Margin="5"/>
+               Margin="5"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 </Window>

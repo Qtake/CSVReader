@@ -153,6 +153,12 @@
   <data name="Loading" xml:space="preserve">
     <value>Loading in progress. Please wait.</value>
   </data>
+  <data name="NeedRestart" xml:space="preserve">
+    <value>Changes will only take effect after a restart.</value>
+  </data>
+  <data name="NoData" xml:space="preserve">
+    <value>No data to save.</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>OK</value>
   </data>

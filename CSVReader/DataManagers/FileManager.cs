@@ -1,7 +1,9 @@
 ﻿using CSVReader.DataBase;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Xml.Serialization;
 
@@ -12,23 +14,22 @@ namespace CSVReader.DataManagers
         public void Read(string path)
         {
             Record record = new Record();
-            using (FileStream fileStream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-            using (BufferedStream bufferedStream = new BufferedStream(fileStream))
-            using (StreamReader reader = new StreamReader(bufferedStream))
+            ApplicationContext db = new ApplicationContext();
+            using (MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(path))
+            using (MemoryMappedViewStream mmvs = mmf.CreateViewStream())
+            using (StreamReader sr = new StreamReader(mmvs))
             {
                 string? line;
-                while ((line = reader.ReadLine()) != null)
+                while ((line = sr.ReadLine()) != null)
                 {
                     if (record.ParseRecord(line))
                     {
-                        using (ApplicationContext db = new ApplicationContext())
-                        {
-                            db.Records.Add(record);
-                            db.SaveChanges();
-                        }
+                        db.Records.Add(record);
+                        db.SaveChanges();
                     }
                 }
             }
+            db.Dispose();
         }
 
         public void Write(string path, List<Record> records)
@@ -38,7 +39,7 @@ namespace CSVReader.DataManagers
             switch (extension)
             {
                 case ".xml":
-                    SaveAsXML(path);
+                    SaveAsXML(path, records);
                     break;
                 case ".xls":
                     SaveAsXLS(path);
@@ -46,17 +47,14 @@ namespace CSVReader.DataManagers
             }
         }
 
-        private void SaveAsXML(string path)
+        private void SaveAsXML(string path, List<Record> records)
         {
             try
             {
                 XmlSerializer xmlFormatter = new XmlSerializer(typeof(List<Record>));
                 using (StreamWriter writer = new StreamWriter(path, true))
                 {
-                    using (ApplicationContext db = new ApplicationContext())
-                    {
-                        xmlFormatter.Serialize(writer, db.Records.ToList());
-                    }
+                    xmlFormatter.Serialize(writer, records);
                 }
             }
             catch(Exception ex)

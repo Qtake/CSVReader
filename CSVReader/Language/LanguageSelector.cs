@@ -1,25 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 
 namespace CSVReader.Language
 {
     internal class LanguageSelector
     {
-        public Dictionary<string, string> Languages { get; private set; }
+        private readonly Dictionary<string, string> _languages;
 
         public LanguageSelector()
         {
-            Languages = new Dictionary<string, string>()
+            _languages = new Dictionary<string, string>()
             {
                 { "English", "en-US" },
                 { "Русский", "ru-RU" }
             };
         }
 
-        public void Select(string key)
+        public string[] GetKeys()
         {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(Languages[key]);
+            return _languages.Keys.ToArray();
+        }
+
+        public string GetValue(string key)
+        {
+            return _languages[key];
+        }
+
+        public void SetLanguage(string key)
+        {
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(_languages[key]);
         }
     }
 }

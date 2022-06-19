@@ -169,6 +169,24 @@ namespace CSVReader.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changes will only take effect after a restart..
+        /// </summary>
+        public static string NeedRestart {
+            get {
+                return ResourceManager.GetString("NeedRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No data to save..
+        /// </summary>
+        public static string NoData {
+            get {
+                return ResourceManager.GetString("NoData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {

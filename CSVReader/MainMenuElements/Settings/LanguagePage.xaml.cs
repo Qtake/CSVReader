@@ -1,4 +1,5 @@
 ﻿using CSVReader.Language;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace CSVReader.MainMenuElements.Settings
@@ -15,13 +16,22 @@ namespace CSVReader.MainMenuElements.Settings
             InitializeComponent();
 
             _languageSelector = new LanguageSelector();
-            var keys = _languageSelector.Languages.Keys;
-            LanguageBox.ItemsSource = keys;
+            FillLanguageBox();
+        }
+
+        private void FillLanguageBox()
+        {
+            LanguageBox.ItemsSource = _languageSelector.GetKeys();
+            string selectedLanguage = ApplicationSettings.Default.LanguageKey;
+            LanguageBox.SelectedValue = selectedLanguage;
         }
 
         public void SaveChanges()
         {
-            // save changes into properties file
+            string selectedLanguage = LanguageBox.SelectedValue.ToString()!;
+            ApplicationSettings.Default.LanguageKey = selectedLanguage;
+            ApplicationSettings.Default.Save();
+            MessageBox.Show(InterfaceLanguage.NeedRestart, InterfaceLanguage.Settings, MessageBoxButton.OK, MessageBoxImage.Warning);
         }
     }
 }

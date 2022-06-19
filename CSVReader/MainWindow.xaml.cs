@@ -1,10 +1,12 @@
 ﻿using CSVReader.DataBase;
 using CSVReader.DataManagers;
+using CSVReader.Language;
 using CSVReader.MainMenuElements.Settings;
 using CSVReader.MainWindowPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Threading;
@@ -23,7 +25,8 @@ namespace CSVReader
 
         public MainWindow()
         {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+            string key = ApplicationSettings.Default.LanguageKey;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(new LanguageSelector().GetValue(key));
             InitializeComponent();
 
             IsDataLoaded = false;
@@ -44,6 +47,8 @@ namespace CSVReader
 
         private async void Open_Click(object sender, RoutedEventArgs e)
         {
+            IsDataLoaded = false;
+
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
                 FileName = "Document",
@@ -65,7 +70,7 @@ namespace CSVReader
         {
             if (!IsDataLoaded)
             {
-                MessageBox.Show("Нет данных для сохранения", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Нет данных для сохранения", InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -79,7 +84,12 @@ namespace CSVReader
 
             if (dialogResult == true)
             {
-               // _dataManager.Write(saveFileDialog.FileName);
+                List<Record> records = new List<Record>()
+                {
+                    new Record(DateTime.Now, "Lexa", "J", "G", "Gomel", "Belarus"),
+                    new Record(DateTime.Now, "Raul", "K", "A", "Gomel", "Belarus")
+                };
+               _dataManager.Write(saveFileDialog.FileName, records);
             }
         }
 
