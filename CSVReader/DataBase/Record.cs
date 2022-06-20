@@ -5,7 +5,7 @@ namespace CSVReader.DataBase
     public class Record
     {
         public int Id { get; set; }
-        public DateTime Date { get; set; }
+        public DateTime? Date { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
@@ -14,7 +14,7 @@ namespace CSVReader.DataBase
 
         public Record()
         {
-            Date = DateTime.Now;
+            Date = null;
             Name = string.Empty;
             Surname = string.Empty;
             Patronymic = string.Empty;

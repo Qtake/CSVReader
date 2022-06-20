@@ -5,9 +5,8 @@ using CSVReader.MainMenuElements.Settings;
 using CSVReader.MainWindowPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -34,10 +33,10 @@ namespace CSVReader
 
         private void DeletePreviousData()
         {
-            using (ApplicationContext db = new ApplicationContext())
+            using (ApplicationContext context = new ApplicationContext())
             {
-                db.Database.ExecuteSqlRaw("DROP TABLE [Records]");
-                db.SaveChanges();
+                context.Database.ExecuteSqlRaw("DROP TABLE [Records]");
+                context.SaveChanges();
             }
         }
 
@@ -71,7 +70,7 @@ namespace CSVReader
             }
         }
 
-        private void SaveAs_Click(object sender, RoutedEventArgs e)
+        private async void SaveAs_Click(object sender, RoutedEventArgs e)
         {
             if (!_isDataLoaded)
             {
@@ -89,13 +88,8 @@ namespace CSVReader
 
             if (dialogResult == true)
             {
-                List<Record> records = new List<Record>()
-                {
-                    new Record(DateTime.Now, "Lexa", "J", "G", "Gomel", "Belarus"),
-                    new Record(DateTime.Now, "Raul", "K", "A", "Gomel", "Belarus")
-                };
-
-               _dataManager.Write(saveFileDialog.FileName, records);
+                OutputDataPage page = (OutputDataPage)MainFrame.Content;
+                await Task.Run(() => _dataManager.Write(saveFileDialog.FileName, page.FilteredRecords.ToList()));
             }
         }
 

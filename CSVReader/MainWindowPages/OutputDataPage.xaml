@@ -7,7 +7,9 @@
       xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="OutputDataPage">
+      Title="OutputDataPage" 
+      Loaded="Page_Loaded"
+      Unloaded="Page_Unloaded">
 
     <Grid>
         <Grid.RowDefinitions>
