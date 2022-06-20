@@ -178,15 +178,6 @@ namespace CSVReader.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No data to be saved..
-        /// </summary>
-        public static string NoDataToSave {
-            get {
-                return ResourceManager.GetString("NoDataToSave", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string OK {

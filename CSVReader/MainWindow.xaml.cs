@@ -19,7 +19,6 @@ namespace CSVReader
     public partial class MainWindow : Window
     {
         private IDataManager _dataManager;
-        private bool _isDataLoaded;
 
         public MainWindow()
         {
@@ -27,8 +26,8 @@ namespace CSVReader
             Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(new LanguageSelector().GetValue(key));
             InitializeComponent();
 
-            _isDataLoaded = false;
             _dataManager = new FileManager();
+            SaveAsItem.IsEnabled = false;
         }
 
         private void DeletePreviousData()
@@ -48,8 +47,7 @@ namespace CSVReader
 
         private async void Open_Click(object sender, RoutedEventArgs e)
         {
-            _isDataLoaded = false;
-            OpenItem.IsEnabled = false;
+            EnableMenuElements(false);
             DeletePreviousData();
 
             OpenFileDialog openFileDialog = new OpenFileDialog()
@@ -65,19 +63,12 @@ namespace CSVReader
                 MainFrame.Content = new LoadingPage();
                 await Task.Run(() => _dataManager.Read(openFileDialog.FileName));
                 MainFrame.Content = new OutputDataPage();
-                _isDataLoaded = true;
-                OpenItem.IsEnabled = true;
+                EnableMenuElements(true);
             }
         }
 
         private async void SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            if (!_isDataLoaded)
-            {
-                MessageBox.Show(InterfaceLanguage.NoDataToSave, InterfaceLanguage.Error, MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
                 FileName = "Document",
@@ -91,6 +82,12 @@ namespace CSVReader
                 OutputDataPage page = (OutputDataPage)MainFrame.Content;
                 await Task.Run(() => _dataManager.Write(saveFileDialog.FileName, page.FilteredRecords.ToList()));
             }
+        }
+
+        private void EnableMenuElements(bool flag)
+        {
+            OpenItem.IsEnabled = flag;
+            SaveAsItem.IsEnabled = flag;
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)

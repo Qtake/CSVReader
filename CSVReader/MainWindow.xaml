@@ -18,7 +18,8 @@
                 <MenuItem x:Name="OpenItem"
                           Header="{x:Static lang:InterfaceLanguage.Open}"
                           Click="Open_Click"/>
-                <MenuItem Header="{x:Static lang:InterfaceLanguage.SaveAs}"
+                <MenuItem x:Name="SaveAsItem"
+                          Header="{x:Static lang:InterfaceLanguage.SaveAs}"
                           Click="SaveAs_Click"/>
                 <MenuItem Header="{x:Static lang:InterfaceLanguage.Exit}"
                           Click="Exit_Click"/>
