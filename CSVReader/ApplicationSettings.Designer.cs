@@ -25,7 +25,7 @@ namespace CSVReader {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("English")]
         public string LanguageKey {
             get {
                 return ((string)(this["LanguageKey"]));
