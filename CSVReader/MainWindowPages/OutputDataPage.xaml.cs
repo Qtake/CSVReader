@@ -38,9 +38,9 @@ namespace CSVReader.MainWindowPages
                 FilteredRecords = FilteredRecords.Where(x => x.Date == _filter.Date);
             }
 
-            if (!string.IsNullOrEmpty(_filter.Name))
+            if (!string.IsNullOrEmpty(_filter.Firstname))
             {
-                FilteredRecords = FilteredRecords.Where(x => x.Name == _filter.Name);
+                FilteredRecords = FilteredRecords.Where(x => x.Firstname == _filter.Firstname);
             }
 
             if (!string.IsNullOrEmpty(_filter.Surname))

@@ -6,7 +6,7 @@ namespace CSVReader.DataBase
     {
         public int Id { get; set; }
         public DateTime? Date { get; set; }
-        public string Name { get; set; }
+        public string Firstname { get; set; }
         public string Surname { get; set; }
         public string Patronymic { get; set; }
         public string City { get; set; }
@@ -15,7 +15,7 @@ namespace CSVReader.DataBase
         public Record()
         {
             Date = null;
-            Name = string.Empty;
+            Firstname = string.Empty;
             Surname = string.Empty;
             Patronymic = string.Empty;
             City = string.Empty;
@@ -25,7 +25,7 @@ namespace CSVReader.DataBase
         public Record(DateTime date, string name, string surname, string patronymic, string city, string country)
         {
             Date = date;
-            Name = name;
+            Firstname = name;
             Surname = surname;
             Patronymic = patronymic;
             City = city;
@@ -40,7 +40,7 @@ namespace CSVReader.DataBase
 
                 Id = 0;
                 Date = Convert.ToDateTime(splitedData[0]);
-                Name = splitedData[1];
+                Firstname = splitedData[1];
                 Surname = splitedData[2];
                 Patronymic = splitedData[3];
                 City = splitedData[4];

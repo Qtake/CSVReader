@@ -21,7 +21,7 @@ namespace CSVReader
         {
             _filter = filter;
             Date.SelectedDate = filter.Date;
-            Firstname.Text = filter.Name;
+            Firstname.Text = filter.Firstname;
             Surname.Text = filter.Surname;
             Patronymic.Text = filter.Patronymic;
             City.Text = filter.City;
@@ -32,7 +32,7 @@ namespace CSVReader
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
             _filter!.Date = Date.SelectedDate;
-            _filter.Name = Firstname.Text;
+            _filter.Firstname = Firstname.Text;
             _filter.Surname = Surname.Text;
             _filter.Patronymic = Patronymic.Text;
             _filter.City = City.Text;
@@ -43,7 +43,7 @@ namespace CSVReader
         private void Reset_Click(object sender, RoutedEventArgs e)
         {
             _filter!.Date = null;
-            _filter.Name = string.Empty;
+            _filter.Firstname = string.Empty;
             _filter.Surname = string.Empty;
             _filter.Patronymic = string.Empty;
             _filter.City = string.Empty;

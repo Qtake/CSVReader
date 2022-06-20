@@ -14,22 +14,23 @@ namespace CSVReader.DataManagers
         public void Read(string path)
         {
             Record record = new Record();
-            ApplicationContext db = new ApplicationContext();
-            using (MemoryMappedFile mmf = MemoryMappedFile.CreateFromFile(path))
-            using (MemoryMappedViewStream mmvs = mmf.CreateViewStream())
-            using (StreamReader sr = new StreamReader(mmvs))
+            ApplicationContext context = new ApplicationContext();
+            using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateFromFile(path))
+            using (MemoryMappedViewStream memoryMappedViewStream = memoryMappedFile.CreateViewStream())
+            using (StreamReader reader = new StreamReader(memoryMappedViewStream))
             {
                 string? line;
-                while ((line = sr.ReadLine()) != null)
+
+                while ((line = reader.ReadLine()) != null)
                 {
                     if (record.ParseRecord(line))
                     {
-                        db.Records.Add(record);
-                        db.SaveChanges();
+                        context.Records.Add(record);
+                        context.SaveChanges();
                     }
                 }
             }
-            db.Dispose();
+            context.Dispose();
         }
 
         public void Write(string path, List<Record> records)
@@ -78,16 +79,11 @@ namespace CSVReader.DataManagers
                 excelApplication.Workbooks.Add();
                 Excel._Worksheet workSheet = excelApplication.ActiveSheet;
 
-                for (var i = 0; i < dataTable.Columns.Count; i++)
-                {
-                    workSheet.Cells[1, i + 1] = dataTable.Columns[i].ColumnName;
-                }
-
                 for (var i = 0; i < dataTable.Rows.Count; i++)
                 {
                     for (var j = 0; j < dataTable.Columns.Count; j++)
                     {
-                        workSheet.Cells[i + 2, j + 1] = dataTable.Rows[i][j];
+                        workSheet.Cells[i + 1, j + 1] = dataTable.Rows[i][j];
                     }
                 }
 
