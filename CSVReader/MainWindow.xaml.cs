@@ -17,6 +17,7 @@ namespace CSVReader
     public partial class MainWindow : Window
     {
         private IDataManager _dataManager;
+        private const string DefaultFileName = "Document";
 
         public MainWindow()
         {
@@ -52,7 +53,7 @@ namespace CSVReader
 
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
-                FileName = "Document",
+                FileName = DefaultFileName,
                 Filter = "CSV Files (*.csv)|*.csv"
             };
 
@@ -74,7 +75,7 @@ namespace CSVReader
 
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
-                FileName = "Document",
+                FileName = DefaultFileName,
                 Filter = "Excel Files | *.xls; *.xlsx; *.xlsm; | XML Files | *.xml"
             };
 
