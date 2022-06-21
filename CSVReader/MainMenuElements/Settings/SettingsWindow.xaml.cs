@@ -22,13 +22,14 @@ namespace CSVReader.MainMenuElements.Settings
             {
                 { InterfaceLanguage.Language, new LanguagePage() }
             };
+
             SettingsMenu.ItemsSource = _settingsItems.Keys;
             _selectedKey = string.Empty;
         }
 
         private void SettingsMenu_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _selectedKey = SettingsMenu.SelectedValue.ToString() ?? "None";
+            _selectedKey = SettingsMenu.SelectedValue.ToString()!;
             SelectedPage.Content = _settingsItems[_selectedKey];
         }
 
@@ -41,6 +42,10 @@ namespace CSVReader.MainMenuElements.Settings
             catch(InvalidCastException)
             {
                 throw new InvalidCastException();
+            }
+            finally
+            {
+                Close();
             }
         }
 

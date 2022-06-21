@@ -26,12 +26,12 @@ namespace CSVReader {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("English")]
-        public string LanguageKey {
+        public string LanguageName {
             get {
-                return ((string)(this["LanguageKey"]));
+                return ((string)(this["LanguageName"]));
             }
             set {
-                this["LanguageKey"] = value;
+                this["LanguageName"] = value;
             }
         }
     }

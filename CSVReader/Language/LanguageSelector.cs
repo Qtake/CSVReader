@@ -18,19 +18,19 @@ namespace CSVReader.Language
             };
         }
 
-        public string[] GetKeys()
+        public string[] GetNames()
         {
             return _languages.Keys.ToArray();
         }
 
-        public string GetValue(string key)
+        public string GetValue(string name)
         {
-            return _languages[key];
+            return _languages[name];
         }
 
-        public void SetLanguage(string key)
+        public void SetCurrentThreadLanguage(string value)
         {
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(_languages[key]);
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(_languages[value]);
         }
     }
 }

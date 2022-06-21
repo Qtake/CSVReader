@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CSVReader" GeneratedClassName="ApplicationSettings">
   <Profiles />
   <Settings>
-    <Setting Name="LanguageKey" Type="System.String" Scope="User">
+    <Setting Name="LanguageName" Type="System.String" Scope="User">
       <Value Profile="(Default)">English</Value>
     </Setting>
   </Settings>

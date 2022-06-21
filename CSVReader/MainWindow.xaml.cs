@@ -5,9 +5,7 @@ using CSVReader.MainMenuElements.Settings;
 using CSVReader.MainWindowPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -22,8 +20,10 @@ namespace CSVReader
 
         public MainWindow()
         {
-            string key = ApplicationSettings.Default.LanguageKey;
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(new LanguageSelector().GetValue(key));
+            string name = ApplicationSettings.Default.LanguageName;
+            LanguageSelector languageSelector = new LanguageSelector();
+            languageSelector.SetCurrentThreadLanguage(name);
+
             InitializeComponent();
 
             _dataManager = new FileManager();
@@ -63,12 +63,15 @@ namespace CSVReader
                 MainFrame.Content = new LoadingPage();
                 await Task.Run(() => _dataManager.Read(openFileDialog.FileName));
                 MainFrame.Content = new OutputDataPage();
-                EnableMenuElements(true);
             }
+
+            EnableMenuElements(true);
         }
 
         private async void SaveAs_Click(object sender, RoutedEventArgs e)
         {
+            EnableMenuElements(false);
+
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
                 FileName = "Document",
@@ -82,6 +85,8 @@ namespace CSVReader
                 OutputDataPage page = (OutputDataPage)MainFrame.Content;
                 await Task.Run(() => _dataManager.Write(saveFileDialog.FileName, page.FilteredRecords.ToList()));
             }
+
+            EnableMenuElements(true);
         }
 
         private void EnableMenuElements(bool flag)
