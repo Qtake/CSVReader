@@ -2,6 +2,7 @@
 using CSVReader.DataBase.Repositories;
 using System.IO;
 using System.IO.MemoryMappedFiles;
+using System.Threading.Tasks;
 
 namespace CSVReader.DataInteraction.Readers
 {
@@ -27,6 +28,11 @@ namespace CSVReader.DataInteraction.Readers
                 }
             }
             repository.Dispose();
+        }
+
+        public async Task ReadAsync(string path)
+        {
+            await Task.Run(() => Read(path));
         }
     }
 }

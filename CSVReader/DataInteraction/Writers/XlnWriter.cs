@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 
 
@@ -39,6 +40,11 @@ namespace CSVReader.DataInteraction.Writers
             {
                 throw new Exception(ex.Message);
             }
+        }
+
+        public async Task WriteAsync(string path, List<Record> records)
+        {
+            await Task.Run(() => Write(path, records));
         }
     }
 }

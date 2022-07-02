@@ -8,7 +8,6 @@ using CSVReader.MainMenuElements.Settings;
 using CSVReader.MainWindowPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace CSVReader
@@ -73,7 +72,7 @@ namespace CSVReader
             {
                 MainFrame.Content = new LoadingPage();
                 _dataReader = ReaderSelector.Select(openFileDialog.FileName);
-                await Task.Run(() => _dataReader.Read(openFileDialog.FileName));
+                await _dataReader.ReadAsync(openFileDialog.FileName);
                 MainFrame.Content = new OutputDataPage();
                 EnableMenuElements(true);
             }
@@ -98,7 +97,7 @@ namespace CSVReader
                 OutputDataPage page = (OutputDataPage)MainFrame.Content;
                 _dataWriter = WriterSelector.Select(saveFileDialog.FileName);
                 var records = await page.FilteredRecords.ToListAsync();
-                await Task.Run(() => _dataWriter.Write(saveFileDialog.FileName, records));
+                await _dataWriter.WriteAsync(saveFileDialog.FileName, records);
                 MessageBox.Show(InterfaceLanguage.FileSaved,
                                 System.Reflection.Assembly.GetCallingAssembly().GetName().Name,
                                 MessageBoxButton.OK,
