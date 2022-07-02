@@ -6,9 +6,6 @@ using System.Windows.Controls;
 
 namespace CSVReader.MainMenuElements.Settings
 {
-    /// <summary>
-    /// Interaction logic for Settings.xaml
-    /// </summary>
     public partial class SettingsWindow : Window
     {
         private readonly Dictionary<string, Page> _settingsItems;

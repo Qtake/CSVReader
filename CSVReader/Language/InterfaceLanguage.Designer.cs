@@ -133,6 +133,15 @@ namespace CSVReader.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File saved successfully..
+        /// </summary>
+        public static string FileSaved {
+            get {
+                return ResourceManager.GetString("FileSaved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filtration.
         /// </summary>
         public static string Filtration {

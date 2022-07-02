@@ -5,5 +5,8 @@
     <Setting Name="LanguageName" Type="System.String" Scope="User">
       <Value Profile="(Default)">English</Value>
     </Setting>
+    <Setting Name="DatabaseConnectionString" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Data Source=.;Initial Catalog=People;Integrated Security=True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

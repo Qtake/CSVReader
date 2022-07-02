@@ -4,9 +4,6 @@ using System.Windows.Controls;
 
 namespace CSVReader.MainMenuElements.Settings
 {
-    /// <summary>
-    /// Interaction logic for LanguagePage.xaml
-    /// </summary>
     public partial class LanguagePage : Page, ISaveChanges
     {
         private readonly LanguageSelector _languageSelector;

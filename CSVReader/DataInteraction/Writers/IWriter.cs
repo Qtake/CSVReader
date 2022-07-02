@@ -1,11 +1,10 @@
 ﻿using CSVReader.DataBase;
 using System.Collections.Generic;
 
-namespace CSVReader.DataManagers
+namespace CSVReader.DataInteraction.Writers
 {
-    internal interface IDataManager
+    internal interface IWriter
     {
-        void Read(string path);
         void Write(string path, List<Record> records);
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CSVReader.DataBase
 {
     internal class Converter
     {
-        public static DataTable ToDataTable<T>(List<T> items)
+        public static DataTable ToDataTable<T>(IEnumerable<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
             PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
@@ -29,6 +30,11 @@ namespace CSVReader.DataBase
             }
 
             return dataTable;
+        }
+
+        public async static Task<DataTable> ToDataTableAsync<T>(IEnumerable<T> items)
+        {
+            return await Task.Run(() => ToDataTable(items));
         }
     }
 }

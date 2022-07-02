@@ -4,16 +4,18 @@ namespace CSVReader.DataBase
 {
     internal class ApplicationContext : DbContext
     {
-        public DbSet<Record> Records { get; set; }
+        public DbSet<Record> Records { get; set; } = null!;
+        private readonly string _connectionString;
 
-        public ApplicationContext()
+        public ApplicationContext(string connectionString)
         {
+            _connectionString = connectionString;
             Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=People;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer(_connectionString);
         }
     }
 }

@@ -2,6 +2,7 @@
 
 namespace CSVReader.DataBase
 {
+    [Serializable]
     public class Record
     {
         public int Id { get; set; }

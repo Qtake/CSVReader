@@ -141,6 +141,9 @@
   <data name="File" xml:space="preserve">
     <value>File</value>
   </data>
+  <data name="FileSaved" xml:space="preserve">
+    <value>File saved successfully.</value>
+  </data>
   <data name="Filtration" xml:space="preserve">
     <value>Filtration</value>
   </data>

@@ -1,18 +1,16 @@
 ﻿using CSVReader.DataBase;
+using CSVReader.DataBase.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 
 namespace CSVReader.MainWindowPages
 {
-    /// <summary>
-    /// Interaction logic for OutputDataPage.xaml
-    /// </summary>
     public partial class OutputDataPage : Page
     {
-        public IEnumerable<Record> FilteredRecords { get; private set; }
-        private readonly List<Record> _dataBaseRecords;
+        public IQueryable<Record> FilteredRecords { get; private set; }
+        private readonly IRepository<Record> _repository;
         private readonly Record _filter;
         private event Action? DataGridUpdateEvent;
 
@@ -20,18 +18,15 @@ namespace CSVReader.MainWindowPages
         {
             InitializeComponent();
 
-            using (ApplicationContext context = new ApplicationContext())
-            {
-                _dataBaseRecords = context.Records.ToList();
-            }
-
-            FilteredRecords = _dataBaseRecords;
+            _repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString);
+            FilteredRecords = _repository.SelectAll();
             _filter = new Record();
             DataGridUpdateEvent = null;
+
             FillDataGrid();
         }
 
-        private void FillDataGrid()
+        private async void FillDataGrid()
         {
             if (_filter.Date != null)
             {
@@ -63,12 +58,12 @@ namespace CSVReader.MainWindowPages
                 FilteredRecords = FilteredRecords.Where(x => x.Country == _filter.Country);
             }
 
-            DataGrid.ItemsSource = FilteredRecords;
+            DataGrid.ItemsSource = await FilteredRecords.ToListAsync();
         }
 
         private void Filtration_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            FilteredRecords = _dataBaseRecords;
+            FilteredRecords = _repository.SelectAll();
             FiltrationWindow filtrationWindow = new FiltrationWindow(_filter, DataGridUpdateEvent ?? FillDataGrid);
             filtrationWindow.ShowDialog();
         }
@@ -81,6 +76,7 @@ namespace CSVReader.MainWindowPages
         private void Page_Unloaded(object sender, System.Windows.RoutedEventArgs e)
         {
             DataGridUpdateEvent -= FillDataGrid;
+            _repository.Dispose();
         }
     }
 }

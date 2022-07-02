@@ -1,22 +1,23 @@
-﻿using CSVReader.DataBase;
+﻿using CSVReader.DataBase.ConnectionManagers;
+using CSVReader.DataBase.Repositories;
+using CSVReader.DataInteraction.Readers;
+using CSVReader.DataInteraction.Writers;
 using CSVReader.DataManagers;
 using CSVReader.Language;
 using CSVReader.MainMenuElements.Settings;
 using CSVReader.MainWindowPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
 namespace CSVReader
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private IDataManager _dataManager;
+        private IReader? _dataReader;
+        private IWriter? _dataWriter;
+        private IConnectionManager? _connection;
         private const string DefaultFileName = "Document";
 
         public MainWindow()
@@ -26,17 +27,26 @@ namespace CSVReader
             languageSelector.SetCurrentThreadLanguage(name);
 
             InitializeComponent();
+            SetDatabaseConnection();
 
-            _dataManager = new FileManager();
+            _dataReader = null;
+            _dataWriter = null;
+            _connection = null;
             SaveAsItem.IsEnabled = false;
+        }
+
+        private void SetDatabaseConnection()
+        {
+            _connection = new ConfigConnection("Local");
+            ApplicationSettings.Default.DatabaseConnectionString = _connection.GetConnectionString();
         }
 
         private void DeletePreviousData()
         {
-            using (ApplicationContext context = new ApplicationContext())
+            using (MsSqlRepository repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString))
             {
-                context.Database.ExecuteSqlRaw("DROP TABLE [Records]");
-                context.SaveChanges();
+                repository.DeleteAll();
+                repository.Save();
             }
         }
 
@@ -62,11 +72,13 @@ namespace CSVReader
             if (dialogResult == true)
             {
                 MainFrame.Content = new LoadingPage();
-                await Task.Run(() => _dataManager.Read(openFileDialog.FileName));
+                _dataReader = ReaderSelector.Select(openFileDialog.FileName);
+                await Task.Run(() => _dataReader.Read(openFileDialog.FileName));
                 MainFrame.Content = new OutputDataPage();
+                EnableMenuElements(true);
             }
 
-            EnableMenuElements(true);
+            OpenItem.IsEnabled = true;
         }
 
         private async void SaveAs_Click(object sender, RoutedEventArgs e)
@@ -84,7 +96,13 @@ namespace CSVReader
             if (dialogResult == true)
             {
                 OutputDataPage page = (OutputDataPage)MainFrame.Content;
-                await Task.Run(() => _dataManager.Write(saveFileDialog.FileName, page.FilteredRecords.ToList()));
+                _dataWriter = WriterSelector.Select(saveFileDialog.FileName);
+                var records = await page.FilteredRecords.ToListAsync();
+                await Task.Run(() => _dataWriter.Write(saveFileDialog.FileName, records));
+                MessageBox.Show(InterfaceLanguage.FileSaved,
+                                System.Reflection.Assembly.GetCallingAssembly().GetName().Name,
+                                MessageBoxButton.OK,
+                                MessageBoxImage.Information);
             }
 
             EnableMenuElements(true);

@@ -4,9 +4,6 @@ using System.Windows;
 
 namespace CSVReader
 {
-    /// <summary>
-    /// Interaction logic for FiltrationWindow.xaml
-    /// </summary>
     public partial class FiltrationWindow : Window
     {
         private readonly Record? _filter;
