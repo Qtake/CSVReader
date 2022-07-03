@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSVReader"
         xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
         mc:Ignorable="d"
-        Title="CSVReader" Height="450" Width="800">
+        Title="{x:Static lang:InterfaceLanguage.ApplicationName}" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>

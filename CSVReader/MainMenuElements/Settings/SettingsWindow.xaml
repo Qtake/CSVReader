@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSVReader.MainMenuElements.Settings"
         xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
         mc:Ignorable="d"
-        Title="Settings" Height="450" Width="800">
+        Title="{x:Static lang:InterfaceLanguage.Settings}" Height="450" Width="800">
     <Grid Background="LightGray">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.9*"/>

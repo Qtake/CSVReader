@@ -8,10 +8,17 @@ namespace CSVReader.DataInteraction.Readers
 {
     internal class CsvReader : IReader
     {
+        private IRepository<Record>? _repository;
+
+        public CsvReader()
+        {
+            _repository = null;
+        }
+
         public async void Read(string path)
         {
             Record record = new Record();
-            MsSqlRepository repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString);
+            _repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString);
             using (MemoryMappedFile memoryMappedFile = MemoryMappedFile.CreateFromFile(path))
             using (MemoryMappedViewStream memoryMappedViewStream = memoryMappedFile.CreateViewStream())
             using (StreamReader reader = new StreamReader(memoryMappedViewStream))
@@ -22,12 +29,12 @@ namespace CSVReader.DataInteraction.Readers
                 {
                     if (record.ParseRecord(line))
                     {
-                        repository.Add(record);
-                        repository.Save();
+                        _repository.Add(record);
+                        _repository.Save();
                     }
                 }
             }
-            repository.Dispose();
+            _repository.Dispose();
         }
 
         public async Task ReadAsync(string path)

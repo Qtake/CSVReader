@@ -1,4 +1,5 @@
-﻿using CSVReader.DataBase.ConnectionManagers;
+﻿using CSVReader.DataBase;
+using CSVReader.DataBase.ConnectionManagers;
 using CSVReader.DataBase.Repositories;
 using CSVReader.DataInteraction.Readers;
 using CSVReader.DataInteraction.Writers;
@@ -17,6 +18,7 @@ namespace CSVReader
         private IReader? _dataReader;
         private IWriter? _dataWriter;
         private IConnectionManager? _connection;
+        private IRepository<Record>? _repository;
         private const string DefaultFileName = "Document";
 
         public MainWindow()
@@ -31,6 +33,7 @@ namespace CSVReader
             _dataReader = null;
             _dataWriter = null;
             _connection = null;
+            _repository = null;
             SaveAsItem.IsEnabled = false;
         }
 
@@ -42,10 +45,10 @@ namespace CSVReader
 
         private void DeletePreviousData()
         {
-            using (MsSqlRepository repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString))
+            using (_repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString))
             {
-                repository.DeleteAll();
-                repository.Save();
+                _repository.DeleteAll();
+                _repository.Save();
             }
         }
 
@@ -99,7 +102,7 @@ namespace CSVReader
                 var records = await page.FilteredRecords.ToListAsync();
                 await _dataWriter.WriteAsync(saveFileDialog.FileName, records);
                 MessageBox.Show(InterfaceLanguage.FileSaved,
-                                System.Reflection.Assembly.GetCallingAssembly().GetName().Name,
+                                InterfaceLanguage.ApplicationName,
                                 MessageBoxButton.OK,
                                 MessageBoxImage.Information);
             }

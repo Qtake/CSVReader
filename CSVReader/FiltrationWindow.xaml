@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CSVReader"
         xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
         mc:Ignorable="d"
-        Title="FiltrationWindow" Height="450" Width="800">
+        Title="{x:Static lang:InterfaceLanguage.Filtration}" Height="450" Width="800">
     <Grid Width="260" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
