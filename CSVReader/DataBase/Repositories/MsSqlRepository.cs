@@ -1,6 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 
 namespace CSVReader.DataBase.Repositories
 {
@@ -38,6 +41,55 @@ namespace CSVReader.DataBase.Repositories
             return _context.Records;
         }
 
+        public IQueryable<Record> SelectAll(Record filter)
+        {
+            IQueryable<Record> filteredRecords = _context.Records;
+
+            if (filter.Date != null)
+            {
+                filteredRecords = filteredRecords.Where(x => x.Date == filter.Date);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Firstname))
+            {
+                filteredRecords = filteredRecords.Where(x => x.Firstname == filter.Firstname);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Surname))
+            {
+                filteredRecords = filteredRecords.Where(x => x.Surname == filter.Surname);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Patronymic))
+            {
+                filteredRecords = filteredRecords.Where(x => x.Patronymic == filter.Patronymic);
+            }
+
+            if (!string.IsNullOrEmpty(filter.City))
+            {
+                filteredRecords = filteredRecords.Where(x => x.City == filter.City);
+            }
+
+            if (!string.IsNullOrEmpty(filter.Country))
+            {
+                filteredRecords = filteredRecords.Where(x => x.Country == filter.Country);
+            }
+
+            return filteredRecords;
+        }
+
+        public IQueryable<Record> SelectAll(params Expression<Func<Record, bool>>[] filters)
+        {
+            IQueryable<Record> filteredRecords = _context.Records;
+
+            foreach (var item in filters)
+            {
+                filteredRecords = filteredRecords.Where(item);
+            }
+
+            return filteredRecords;
+        }
+
         public Record Select(int id)
         {
             Record? record = _context.Records.Find(id);
@@ -50,7 +102,6 @@ namespace CSVReader.DataBase.Repositories
             {
                 throw new NullReferenceException();
             }
-
         }
 
         public void Add(Record item)

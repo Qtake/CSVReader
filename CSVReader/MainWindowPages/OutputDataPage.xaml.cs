@@ -28,36 +28,7 @@ namespace CSVReader.MainWindowPages
 
         private async void FillDataGrid()
         {
-            if (_filter.Date != null)
-            {
-                FilteredRecords = FilteredRecords.Where(x => x.Date == _filter.Date);
-            }
-
-            if (!string.IsNullOrEmpty(_filter.Firstname))
-            {
-                FilteredRecords = FilteredRecords.Where(x => x.Firstname == _filter.Firstname);
-            }
-
-            if (!string.IsNullOrEmpty(_filter.Surname))
-            {
-                FilteredRecords = FilteredRecords.Where(x => x.Surname == _filter.Surname);
-            }
-
-            if (!string.IsNullOrEmpty(_filter.Patronymic))
-            {
-                FilteredRecords = FilteredRecords.Where(x => x.Patronymic == _filter.Patronymic);
-            }
-
-            if (!string.IsNullOrEmpty(_filter.City))
-            {
-                FilteredRecords = FilteredRecords.Where(x => x.City == _filter.City);
-            }
-
-            if (!string.IsNullOrEmpty(_filter.Country))
-            {
-                FilteredRecords = FilteredRecords.Where(x => x.Country == _filter.Country);
-            }
-
+            FilteredRecords = _repository.SelectAll(_filter);
             DataGrid.ItemsSource = await FilteredRecords.ToListAsync();
         }
 

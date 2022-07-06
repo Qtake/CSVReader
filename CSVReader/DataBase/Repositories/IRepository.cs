@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace CSVReader.DataBase.Repositories
 {
@@ -7,6 +8,10 @@ namespace CSVReader.DataBase.Repositories
         where T : class
     {
         IQueryable<T> SelectAll();
+
+        IQueryable<T> SelectAll(Record filter);
+
+        IQueryable<T> SelectAll(params Expression<Func<Record, bool>>[] filters);
 
         T Select(int id);
 
