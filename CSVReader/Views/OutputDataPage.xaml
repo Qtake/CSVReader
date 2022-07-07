@@ -7,7 +7,8 @@
       xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="OutputDataPage">
+      Title="OutputDataPage"
+      DataContext="{Binding OutputPageVM, Source={StaticResource Locator}}">
 
     <Grid>
         <Grid.RowDefinitions>
@@ -16,7 +17,8 @@
         </Grid.RowDefinitions>
 
         <DataGrid Grid.Row="0"
-                  IsReadOnly="True"/>
+                  IsReadOnly="True"
+                  ItemsSource="{Binding DataBaseRecords}"/>
         <Button Content="{x:Static lang:InterfaceLanguage.Filtration}"
                 Grid.Row="1"
                 Height="25"
