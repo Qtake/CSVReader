@@ -7,6 +7,7 @@ using CSVReader.Models.DataInteraction.Readers;
 using CSVReader.Models.DataInteraction.Writers;
 using CSVReader.Views;
 using CSVReader.Views.SettingsButton;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -27,8 +28,10 @@ namespace CSVReader.ViewModels
         public ICommand OpenCommand { get; init; }
         public ICommand SaveAsCommand { get; init; }
         public ICommand ExitCommand { get; init; }
-        public ICommand SettingsCommand { get; init; }
+        public ICommand SettingsWindowCommand { get; init; }
+        public ICommand FiltrationWindowCommand { get; init; }
         public Page CurrentFramePage { get; private set; }
+        public List<Record> DataBaseRecords { get; private set; }
         public bool OpenButtonState { get; private set; }
         public bool SaveAsButtonState { get; private set; }
 
@@ -36,19 +39,21 @@ namespace CSVReader.ViewModels
         private IReader? _dataReader;
         private IWriter? _dataWriter;
         private const string DefaultFileName = "Document";
-
+        
         public MainWindowViewModel()
         {
             SetDataBaseConnection();
 
-            OpenCommand = new RelayCommand((x) => ShowOpenFileWindow());
-            SaveAsCommand = new RelayCommand((x) => ShowSaveAsFileWindow());
+            OpenCommand = new RelayCommand((x) => OpenFile());
+            SaveAsCommand = new RelayCommand((x) => SaveAsFile());
             ExitCommand = new RelayCommand((x) => CloseApplication());
-            SettingsCommand = new RelayCommand((x) => ShowSettingsWindow());
+            SettingsWindowCommand = new RelayCommand((x) => ShowSettingsWindow());
+            FiltrationWindowCommand = new RelayCommand((x) => ShowFiltrationWindow());
             _repository = null;
             _dataReader = null;
             _dataWriter = null;
             CurrentFramePage = null!;
+            DataBaseRecords = null!;
             OpenButtonState = true;
             SaveAsButtonState = false;
         }
@@ -87,7 +92,7 @@ namespace CSVReader.ViewModels
             OnPropertyChanged(nameof(CurrentFramePage));
         }
 
-        private async void ShowOpenFileWindow()
+        private async void OpenFile()
         {
             EnableMenuElements(false);
             DeletePreviousData();
@@ -105,6 +110,7 @@ namespace CSVReader.ViewModels
                 ChangeFramePage(new LoadingPage());
                 _dataReader = ReaderSelector.Select(openFileDialog.FileName);
                 await _dataReader.ReadAsync(openFileDialog.FileName);
+                await GetDataBaseRecordsAsync();
                 ChangeFramePage(new OutputDataPage());
                 EnableMenuElements(true);
             }
@@ -113,7 +119,7 @@ namespace CSVReader.ViewModels
             OnPropertyChanged(nameof(OpenButtonState));
         }
 
-        private void ShowSaveAsFileWindow()
+        private async void SaveAsFile()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog()
             {
@@ -125,10 +131,8 @@ namespace CSVReader.ViewModels
 
             if (dialogResult == true)
             {
-                OutputDataPage page = (OutputDataPage)CurrentFramePage;
                 _dataWriter = WriterSelector.Select(saveFileDialog.FileName);
-                //var records = await page.FilteredRecords.ToListAsync();
-                //await _dataWriter.WriteAsync(saveFileDialog.FileName, records);
+                await _dataWriter.WriteAsync(saveFileDialog.FileName, DataBaseRecords);
                 MessageBox.Show(InterfaceLanguage.FileSaved,
                                 InterfaceLanguage.ApplicationName,
                                 MessageBoxButton.OK,
@@ -136,15 +140,29 @@ namespace CSVReader.ViewModels
             }
         }
 
-        private void CloseApplication()
+        private static void CloseApplication()
         {
             Application.Current.Shutdown();
         }
 
-        private void ShowSettingsWindow()
+        private static void ShowSettingsWindow()
         {
             SettingsWindow settingsWindow = new SettingsWindow();
             settingsWindow.ShowDialog();
+        }
+
+        private static void ShowFiltrationWindow()
+        {
+            FiltrationWindow filtrationWindow = new FiltrationWindow();
+            filtrationWindow.ShowDialog();
+        }
+
+        private async Task GetDataBaseRecordsAsync()
+        {
+            using (_repository = new MsSqlRepository(ApplicationSettings.Default.DatabaseConnectionString))
+            {
+                await Task.Run(() => DataBaseRecords = _repository.SelectAll().ToList());
+            }
         }
     }
 }

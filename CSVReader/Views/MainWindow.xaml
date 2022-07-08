@@ -28,7 +28,7 @@
                           Command="{Binding ExitCommand}"/>
             </MenuItem>
             <MenuItem Header="{x:Static lang:InterfaceLanguage.Settings}"
-                      Command="{Binding SettingsCommand}"/>
+                      Command="{Binding SettingsWindowCommand}"/>
         </Menu>
         <Frame Grid.Row="1"
                Margin="5"
