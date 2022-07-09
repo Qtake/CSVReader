@@ -42,7 +42,7 @@ namespace CSVReader.ViewModels
             set
             {
                 _filter.Date = value;
-                RaisePropertyChanged(nameof(Date));
+                OnPropertyChanged(nameof(Date));
             }
         }
 
@@ -52,7 +52,7 @@ namespace CSVReader.ViewModels
             set
             {
                 _filter.Firstname = value;
-                RaisePropertyChanged(nameof(Firstname));
+                OnPropertyChanged(nameof(Firstname));
             }
         }
 
@@ -62,7 +62,7 @@ namespace CSVReader.ViewModels
             set
             {
                 _filter.Surname = value;
-                RaisePropertyChanged(nameof(Surname));
+                OnPropertyChanged(nameof(Surname));
             }
         }
 
@@ -72,7 +72,7 @@ namespace CSVReader.ViewModels
             set
             {
                 _filter.Patronymic = value;
-                RaisePropertyChanged(nameof(Patronymic));
+                OnPropertyChanged(nameof(Patronymic));
             }
         }
 
@@ -82,7 +82,7 @@ namespace CSVReader.ViewModels
             set
             {
                 _filter.City = value;
-                RaisePropertyChanged(nameof(City));
+                OnPropertyChanged(nameof(City));
             }
         }
 
@@ -92,7 +92,7 @@ namespace CSVReader.ViewModels
             set
             {
                 _filter.Country = value;
-                RaisePropertyChanged(nameof(Country));
+                OnPropertyChanged(nameof(Country));
             }
         }
 
@@ -128,12 +128,7 @@ namespace CSVReader.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
-        public void RaisePropertyChanged(string prop)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
-        }
-
-        private void SetDataBaseConnection()
+        private static void SetDataBaseConnection()
         {
             IConnectionManager connectionManager = new ConfigConnection("Local");
             ApplicationSettings.Default.DatabaseConnectionString = connectionManager.GetConnectionString();
@@ -241,7 +236,7 @@ namespace CSVReader.ViewModels
             {
                 IQueryable<Record> records = _repository.SelectAll();
 
-                if (_filter.Date != null)
+                if (Date != null)
                 {
                     records = _repository.SelectAll(x => x.Date == Date);
                 }
@@ -278,7 +273,7 @@ namespace CSVReader.ViewModels
 
         private async void ResetFiltersAsync()
         {
-            _filter = new Record();
+            ClearFilterFilds();
             await GetDataBaseRecordsAsync();
             UpdateSavedRecords();
         }
@@ -286,6 +281,17 @@ namespace CSVReader.ViewModels
         private void UpdateSavedRecords()
         {
             OnPropertyChanged(nameof(DataBaseRecords));
+        }
+
+        private void ClearFilterFilds()
+        {
+            _filter = new Record();
+            OnPropertyChanged(nameof(Date));
+            OnPropertyChanged(nameof(Firstname));
+            OnPropertyChanged(nameof(Surname));
+            OnPropertyChanged(nameof(Patronymic));
+            OnPropertyChanged(nameof(City));
+            OnPropertyChanged(nameof(Country));
         }
     }
 }
