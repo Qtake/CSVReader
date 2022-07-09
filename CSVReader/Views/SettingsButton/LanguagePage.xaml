@@ -7,7 +7,8 @@
       xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="LanguagePage">
+      Title="LanguagePage"
+      DataContext="{Binding SettingsWindowVM, Source={StaticResource Locator}}">
 
     <Grid>
         <StackPanel Orientation="Vertical"
@@ -18,7 +19,9 @@
             <ComboBox Width="160"
                       Height="25"
                       IsReadOnly="True"
-                      IsTextSearchEnabled="True"/>
+                      IsTextSearchEnabled="True"
+                      ItemsSource="{Binding LanguageNames}"
+                      SelectedValue="{Binding SelectedLanguageName, Mode=TwoWay}"/>
         </StackPanel>
     </Grid>
 </Page>

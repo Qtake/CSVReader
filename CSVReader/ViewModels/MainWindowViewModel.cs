@@ -104,6 +104,7 @@ namespace CSVReader.ViewModels
         
         public MainWindowViewModel()
         {
+            SetInterfaceLanguage();
             SetDataBaseConnection();
 
             OpenCommand = new RelayCommand((x) => OpenFileAsync());
@@ -126,6 +127,13 @@ namespace CSVReader.ViewModels
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private static void SetInterfaceLanguage()
+        {
+            string name = ApplicationSettings.Default.LanguageName;
+            LanguageSelector languageSelector = new LanguageSelector();
+            languageSelector.SetCurrentThreadLanguage(name);
         }
 
         private static void SetDataBaseConnection()
@@ -205,10 +213,7 @@ namespace CSVReader.ViewModels
             }
         }
 
-        private static void CloseApplication()
-        {
-            Application.Current.Shutdown();
-        }
+        private static void CloseApplication() => Application.Current.Shutdown();
 
         private static void ShowSettingsWindow()
         {
@@ -278,10 +283,7 @@ namespace CSVReader.ViewModels
             UpdateSavedRecords();
         }
 
-        private void UpdateSavedRecords()
-        {
-            OnPropertyChanged(nameof(DataBaseRecords));
-        }
+        private void UpdateSavedRecords() => OnPropertyChanged(nameof(DataBaseRecords));
 
         private void ClearFilterFilds()
         {
