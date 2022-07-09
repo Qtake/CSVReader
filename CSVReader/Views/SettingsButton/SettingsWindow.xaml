@@ -48,7 +48,9 @@
             <Button Content="{x:Static lang:InterfaceLanguage.Cancel}"
                     Width="100"
                     Height="25"
-                    Margin="5"/>
+                    Margin="5"
+                    Command="{Binding CloseWindowCommand}"
+                    IsCancel="True"/>
         </StackPanel>
 
     </Grid>

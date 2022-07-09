@@ -23,26 +23,26 @@ namespace CSVReader.UserControls
             }
         }
 
-        public static readonly DependencyProperty CommandProperty =
-            DependencyProperty.Register("Command", typeof(ICommand),
-            typeof(ListBoxItem),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None));
-
         public ICommand Command
         {
             get { return (ICommand)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         }
 
-        public static readonly DependencyProperty CommandParameterProperty =
-            DependencyProperty.Register("CommandParameter", typeof(object),
-            typeof(ListBoxItem),
-            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None));
-
         public object CommandParameter
         {
             get { return GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
         }
+
+        public static readonly DependencyProperty CommandProperty =
+            DependencyProperty.Register(nameof(Command), typeof(ICommand),
+            typeof(ListBoxItem),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None));
+
+        public static readonly DependencyProperty CommandParameterProperty =
+            DependencyProperty.Register(nameof(CommandParameter), typeof(object),
+            typeof(ListBoxItem),
+            new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.None));
     }
 }
