@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:CSVReader.Views"
         xmlns:lang="clr-namespace:CSVReader.Language;assembly=CSVReader"
         mc:Ignorable="d"
-        Title="{x:Static lang:InterfaceLanguage.Filtration}" Height="450" Width="800">
+        Title="{x:Static lang:InterfaceLanguage.Filtration}" Height="450" Width="800"
+        DataContext="{Binding MainWindowVM, Source={StaticResource Locator}}">
     <Grid Width="260" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -18,30 +19,37 @@
             <DatePicker Height="auto"
                         Margin="0, 0, 0, 5"/>
             <TextBlock Text="{x:Static lang:InterfaceLanguage.Firstname}"/>
-            <TextBox Height="20"
+            <TextBox Text="{Binding Firstname, Mode=TwoWay}"
+                     Height="20"
                      Margin="0, 0, 0, 5"/>
             <TextBlock Text="{x:Static lang:InterfaceLanguage.Surname}"/>
-            <TextBox Height="20"
+            <TextBox Text="{Binding Surname, Mode=TwoWay}"
+                     Height="20"
                      Margin="0, 0, 0, 5"/>
             <TextBlock Text="{x:Static lang:InterfaceLanguage.Patronymic}"/>
-            <TextBox Height="20"
+            <TextBox Text="{Binding Patronymic, Mode=TwoWay}"
+                     Height="20"
                      Margin="0, 0, 0, 5"/>
             <TextBlock Text="{x:Static lang:InterfaceLanguage.City}"/>
-            <TextBox Height="20"
+            <TextBox Text="{Binding City, Mode=TwoWay}"
+                     Height="20"
                      Margin="0, 0, 0, 5"/>
             <TextBlock Text="{x:Static lang:InterfaceLanguage.Country}"/>
-            <TextBox Height="20"
+            <TextBox Text="{Binding Country, Mode=TwoWay}"
+                     Height="20"
                      Margin="0, 0, 0, 10"/>
         </StackPanel>
         <Button Content="{x:Static lang:InterfaceLanguage.Apply}"
                 Height="20"
                 Width="100"
                 Grid.Row="1"
-                HorizontalAlignment="Left"/>
+                HorizontalAlignment="Left"
+                Command="{Binding ApplyFiltersCommand}"/>
         <Button Content="{x:Static lang:InterfaceLanguage.Reset}"
                 Height="20"
                 Width="100"
                 Grid.Row="1"
-                HorizontalAlignment="Right"/>
+                HorizontalAlignment="Right"
+                Command="{Binding ResetFiltersCommand}"/>
     </Grid>
 </Window>
